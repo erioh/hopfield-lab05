@@ -58,23 +58,23 @@ public class HopfieldAlgorithm {
 
     private void guess(double[] data, double[][] learningMatrix, double[] previousGuess, int count) {
         if (count < 10) {
-            double[] result = new double[data.length];
+            double[] currentGuess = new double[data.length];
             for (int i = 0; i < learningMatrix.length; i++) {
                 for (int j = 0; j < learningMatrix[i].length; j++) {
-                    result[i] += convert(data[j]) * learningMatrix[i][j];
+                    currentGuess[i] += convert(data[j]) * learningMatrix[i][j];
                 }
             }
-            for (int i = 0; i < result.length; i++) {
-                result[i] = result[i] > 0 ? 1 : 0;
+            for (int i = 0; i < currentGuess.length; i++) {
+                currentGuess[i] = currentGuess[i] > 0 ? 1 : 0;
             }
             boolean done = false;
-            if (Arrays.equals(previousGuess, result)) {
+            if (Arrays.equals(currentGuess, previousGuess)) {
                 done = true;
-                System.out.println("It's " + Arrays.toString(result));
+                System.out.println("It's " + Arrays.toString(currentGuess));
                 System.out.printf("Number of used iterations is %d%n", count);
             }
             if (!done) {
-                guess(result, learningMatrix, result, ++count);
+                guess(currentGuess, learningMatrix, currentGuess, ++count);
             }
         } else {
             System.out.println("Unable to find correct result");
