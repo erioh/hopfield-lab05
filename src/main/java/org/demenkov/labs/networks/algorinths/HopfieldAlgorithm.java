@@ -47,16 +47,16 @@ public class HopfieldAlgorithm {
         return input > 0 ? 1 : -1;
     }
 
-    public void check(double[][] dataToBeChecked, double[][] ideal) throws IOException {
+    public void check(double[][] dataToBeChecked) throws IOException {
         double[][] learningMatrix = read(DATA_RESULT_TXT);
 
         for (double[] data : dataToBeChecked) {
-            guess(data, learningMatrix, ideal, 0);
+            guess(data, learningMatrix, null, 0);
         }
 
     }
 
-    private void guess(double[] data, double[][] learningMatrix, double[][] ideal, int count) {
+    private void guess(double[] data, double[][] learningMatrix, double[] previousGuess, int count) {
         if (count < 10) {
             double[] result = new double[data.length];
             for (int i = 0; i < learningMatrix.length; i++) {
@@ -68,16 +68,13 @@ public class HopfieldAlgorithm {
                 result[i] = result[i] > 0 ? 1 : 0;
             }
             boolean done = false;
-            for (double[] row : ideal) {
-                if (Arrays.equals(row, result)) {
-                    System.out.println("It's " + Arrays.toString(row));
-                    System.out.printf("Number of used iterations is %d%n", count);
-                    done = true;
-                    break;
-                }
+            if (Arrays.equals(previousGuess, result)) {
+                done = true;
+                System.out.println("It's " + Arrays.toString(result));
+                System.out.printf("Number of used iterations is %d%n", count);
             }
             if (!done) {
-                guess(result, learningMatrix, ideal, ++count);
+                guess(result, learningMatrix, result, ++count);
             }
         } else {
             System.out.println("Unable to find correct result");

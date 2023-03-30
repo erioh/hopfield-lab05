@@ -12,6 +12,6 @@ public class Main {
         HopfieldAlgorithm algorithm = new HopfieldAlgorithm();
         algorithm.learn(trainingData);
         double[][] dataToBeChecked = read("data/CheckData.txt");
-        algorithm.check(dataToBeChecked, trainingData);
+        algorithm.check(dataToBeChecked);
     }
 }
