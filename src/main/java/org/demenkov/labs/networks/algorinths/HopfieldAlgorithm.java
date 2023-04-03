@@ -20,31 +20,26 @@ public class HopfieldAlgorithm {
         for (double[] data : trainingData) {
             train(learningMatrix, data);
         }
-
-        normalize(learningMatrix, length);
         write(DATA_RESULT_TXT, learningMatrix);
     }
 
-    private void normalize(double[][] learningMatrix, int length) {
-        for (int i = 0; i < learningMatrix.length; i++) {
-            for (int j = 0; j < learningMatrix[i].length; j++) {
-                learningMatrix[i][j] /= length;
-            }
-        }
-    }
-
     private void train(double[][] learningMatrix, double[] data) {
-        for (int i = 0; i < data.length; i++) {
-            for (int j = 0; j < data.length; j++) {
+        double[] convertedData = convert(data);
+        for (int i = 0; i < convertedData.length; i++) {
+            for (int j = 0; j < convertedData.length; j++) {
                 if (i != j) {
-                    learningMatrix[i][j] += convert(data[i]) * convert(data[j]);
+                    learningMatrix[i][j] += convertedData[i] * convertedData[j];
                 }
             }
         }
     }
 
-    double convert(double input) {
-        return input > 0 ? 1 : -1;
+    private double[] convert(double[] input) {
+        double[] result = new double[input.length];
+        for (int i = 0; i < input.length; i++) {
+            result[i] = input[i] > 0 ? 1 : -1;
+        }
+        return result;
     }
 
     public void check(double[][] dataToBeChecked) throws IOException {
@@ -53,15 +48,15 @@ public class HopfieldAlgorithm {
         for (double[] data : dataToBeChecked) {
             guess(data, learningMatrix, null, 0);
         }
-
     }
 
     private void guess(double[] data, double[][] learningMatrix, double[] previousGuess, int count) {
         if (count < 10) {
             double[] currentGuess = new double[data.length];
+            double[] convertedData = convert(data);
             for (int i = 0; i < learningMatrix.length; i++) {
                 for (int j = 0; j < learningMatrix[i].length; j++) {
-                    currentGuess[i] += convert(data[j]) * learningMatrix[i][j];
+                    currentGuess[i] += convertedData[j] * learningMatrix[i][j];
                 }
             }
             for (int i = 0; i < currentGuess.length; i++) {

@@ -8,10 +8,13 @@ import static org.demenkov.labs.networks.files.FileModificator.read;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        double[][] trainingData = read("data/TrainingData.txt");
         HopfieldAlgorithm algorithm = new HopfieldAlgorithm();
-        algorithm.learn(trainingData);
-        double[][] dataToBeChecked = read("data/CheckData.txt");
-        algorithm.check(dataToBeChecked);
+        if (args.length > 0 && args[0].equals("train")) {
+            double[][] trainingData = read("data/TrainingData.txt");
+            algorithm.learn(trainingData);
+        } else {
+            double[][] dataToBeChecked = read("data/CheckData.txt");
+            algorithm.check(dataToBeChecked);
+        }
     }
 }
